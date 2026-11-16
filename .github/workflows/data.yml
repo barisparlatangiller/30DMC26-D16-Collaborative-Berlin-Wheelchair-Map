@@ -1,0 +1,45 @@
+name: data
+on:
+  workflow_dispatch:
+  push:
+    paths: ['pipeline/*.py', '.github/workflows/data.yml']
+permissions:
+  contents: write
+jobs:
+  data:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq osmium-tool
+      - run: pip install pillow numpy pyproj shapely h3
+      - name: OpenStreetMap (Geofabrik Berlin)
+        run: |
+          set -e
+          wget -q https://download.geofabrik.de/europe/germany/berlin-latest.osm.pbf -O berlin.pbf
+          osmium fileinfo -e berlin.pbf | grep -i "timestamp" | head -3 > osm_timestamp.txt || true
+          osmium tags-filter berlin.pbf nwr/amenity nwr/shop nwr/tourism nwr/leisure nwr/healthcare -o p.pbf
+          osmium export p.pbf -f geojsonseq -o places.geojsonseq --geometry-types=point,polygon
+          osmium tags-filter berlin.pbf nwr/railway=station,halt,tram_stop n/highway=elevator -o t.pbf
+          osmium export t.pbf -f geojsonseq -o transit.geojsonseq --geometry-types=point,polygon
+          osmium tags-filter berlin.pbf r/boundary=administrative -o a.pbf
+          osmium export a.pbf -f geojsonseq -o adm.geojsonseq --geometry-types=polygon
+          osmium tags-filter berlin.pbf nwr/building w/highway w/railway nwr/natural=water,wood w/waterway nwr/landuse nwr/leisure -o b.pbf
+          osmium export b.pbf -f geojsonseq -o box.geojsonseq --geometry-types=linestring,polygon
+          ls -la *.geojsonseq
+      - name: process
+        run: |
+          set -o pipefail
+          python pipeline/process.py 2>&1 | tee docs/data/log.txt
+          python pipeline/basemap.py 2>&1 | tee -a docs/data/log.txt
+      - name: commit
+        if: always()
+        run: |
+          cp osm_timestamp.txt docs/data/ || true
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/data
+          git commit -m "Data from OpenStreetMap (Geofabrik Berlin)" || echo "nothing"
+          git pull --rebase && git push

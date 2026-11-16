@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Berlin, Step-Free?</title>
+<meta name="description" content="How wheelchair-accessible is Berlin? Three 3D maps from OpenStreetMap, the map volunteers build together: accessible places, the blind spots, and the stations that get you there.">
+<link rel="stylesheet" href="style.css?v=1">
+<script src="https://unpkg.com/deck.gl@9.0.38/dist.min.js"></script>
+</head>
+<body>
+<div class="app">
+  <main class="mapwrap">
+    <div id="map" aria-label="3D map of Berlin"></div>
+    <div class="card legend-card" id="legend"></div>
+    <div class="card mapbar">
+      <div class="seg" id="tabs">
+        <button data-t="0" class="on">1 · Accessible?</button>
+        <button data-t="1">2 · Blind spots</button>
+        <button data-t="2">3 · Getting there</button>
+      </div>
+    </div>
+    <div id="tip" class="card" hidden></div>
+    <div id="load" class="loading">Mapping Berlin…</div>
+  </main>
+
+  <aside class="panel card" id="panel">
+    <header class="head">
+      <p class="eyebrow">#30DayMapChallenge · Day 16 · Collaborative map · Berlin</p>
+      <h1 id="h1">How step-free is Berlin?</h1>
+      <p class="lede" id="lede"></p>
+    </header>
+    <div class="stats" id="stats"></div>
+    <section class="block" id="detail" hidden></section>
+    <section class="block">
+      <h2 class="label">Districts</h2>
+      <ol class="rank" id="rank"></ol>
+    </section>
+    <details class="howto">
+      <summary>How to read this map</summary>
+      <ol>
+        <li><b>Every column is a hexagon of about 0.7 km².</b> Height = number of places; colour = what the map says about wheelchair access there.</li>
+        <li>OpenStreetMap is mapped by volunteers. <b>"Unknown"</b> doesn't mean inaccessible: nobody has checked yet. Tools like Wheelmap let anyone add it.</li>
+        <li>"Yes" means step-free entrance and main rooms; "limited" means partly (e.g. one step, or no accessible toilet).</li>
+      </ol>
+    </details>
+    <section class="block src">
+      <h2 class="label">Data</h2>
+      <p id="srcp">OpenStreetMap contributors (ODbL), Geofabrik Berlin extract. Places = shops, food, health, public and cultural venues, toilets (street furniture excluded). Wheelchair values as tagged in OSM (also edited via Wheelmap).</p>
+      <p>Barış Parlatangiller, built with Claude · <a href="https://github.com/barisparlatangiller/30DMC26-D16-Collaborative-Berlin-Wheelchair-Map" target="_blank" rel="noopener">code &amp; method</a> · <a href="https://barisparlatangiller.github.io/" target="_blank" rel="noopener">all maps</a></p>
+    </section>
+  </aside>
+</div>
+<div id="film" hidden><div id="fq"></div><div id="fc"></div><div id="fa"></div><div id="fs"></div></div>
+<script src="app.js?v=1"></script>
+</body>
+</html>
