@@ -1,0 +1,197 @@
+{
+ "places": 56190,
+ "tagged": 28209,
+ "yes": 13061,
+ "limited": 5512,
+ "no": 9636,
+ "bycat": {
+  "food": {
+   "t": 12589,
+   "tg": 7797,
+   "y": 2969
+  },
+  "shops": {
+   "t": 21068,
+   "tg": 12123,
+   "y": 5735
+  },
+  "health": {
+   "t": 5080,
+   "tg": 1988,
+   "y": 1042
+  },
+  "public": {
+   "t": 6429,
+   "tg": 2174,
+   "y": 1083
+  },
+  "culture": {
+   "t": 3149,
+   "tg": 1745,
+   "y": 878
+  },
+  "toilets": {
+   "t": 1120,
+   "tg": 865,
+   "y": 590
+  },
+  "other": {
+   "t": 6755,
+   "tg": 1517,
+   "y": 764
+  }
+ },
+ "transit": {
+  "ubahn": {
+   "yes": 138,
+   "no": 35,
+   "limited": 4
+  },
+  "sbahn": {
+   "yes": 116,
+   "limited": 9,
+   "no": 12,
+   "unknown": 1
+  },
+  "tram": {
+   "unknown": 653,
+   "yes": 205,
+   "limited": 10,
+   "no": 25
+  },
+  "rail": {
+   "yes": 28,
+   "limited": 7,
+   "no": 3
+  },
+  "elevator": {
+   "yes": 411,
+   "unknown": 187,
+   "limited": 6,
+   "designated": 8,
+   "no": 3
+  }
+ },
+ "districts": [
+  {
+   "name": "Mitte",
+   "t": 8958,
+   "tg": 5317,
+   "y": 2560,
+   "l": 901,
+   "n": 1856,
+   "tagged": 59.4,
+   "yes_of_tagged": 48.1
+  },
+  {
+   "name": "Friedrichshain-Kreuzberg",
+   "t": 6294,
+   "tg": 3710,
+   "y": 1347,
+   "l": 760,
+   "n": 1603,
+   "tagged": 58.9,
+   "yes_of_tagged": 36.3
+  },
+  {
+   "name": "Pankow",
+   "t": 6074,
+   "tg": 3396,
+   "y": 1347,
+   "l": 825,
+   "n": 1224,
+   "tagged": 55.9,
+   "yes_of_tagged": 39.7
+  },
+  {
+   "name": "Lichtenberg",
+   "t": 2640,
+   "tg": 1388,
+   "y": 818,
+   "l": 216,
+   "n": 354,
+   "tagged": 52.6,
+   "yes_of_tagged": 58.9
+  },
+  {
+   "name": "Treptow-K\u00f6penick",
+   "t": 3486,
+   "tg": 1669,
+   "y": 868,
+   "l": 268,
+   "n": 533,
+   "tagged": 47.9,
+   "yes_of_tagged": 52.0
+  },
+  {
+   "name": "Neuk\u00f6lln",
+   "t": 4449,
+   "tg": 2073,
+   "y": 867,
+   "l": 523,
+   "n": 683,
+   "tagged": 46.6,
+   "yes_of_tagged": 41.8
+  },
+  {
+   "name": "Tempelhof-Sch\u00f6neberg",
+   "t": 5441,
+   "tg": 2511,
+   "y": 1065,
+   "l": 478,
+   "n": 968,
+   "tagged": 46.1,
+   "yes_of_tagged": 42.4
+  },
+  {
+   "name": "Charlottenburg-Wilmersdorf",
+   "t": 7588,
+   "tg": 3436,
+   "y": 1464,
+   "l": 725,
+   "n": 1247,
+   "tagged": 45.3,
+   "yes_of_tagged": 42.6
+  },
+  {
+   "name": "Spandau",
+   "t": 2206,
+   "tg": 967,
+   "y": 573,
+   "l": 168,
+   "n": 226,
+   "tagged": 43.8,
+   "yes_of_tagged": 59.3
+  },
+  {
+   "name": "Steglitz-Zehlendorf",
+   "t": 4053,
+   "tg": 1702,
+   "y": 875,
+   "l": 324,
+   "n": 503,
+   "tagged": 42.0,
+   "yes_of_tagged": 51.4
+  },
+  {
+   "name": "Marzahn-Hellersdorf",
+   "t": 2087,
+   "tg": 854,
+   "y": 651,
+   "l": 102,
+   "n": 101,
+   "tagged": 40.9,
+   "yes_of_tagged": 76.2
+  },
+  {
+   "name": "Reinickendorf",
+   "t": 2914,
+   "tg": 1186,
+   "y": 626,
+   "l": 222,
+   "n": 338,
+   "tagged": 40.7,
+   "yes_of_tagged": 52.8
+  }
+ ]
+}

@@ -1,0 +1,53 @@
++ wget -q https://download.geofabrik.de/europe/germany/berlin-latest.osm.pbf -O berlin.pbf
++ osmium fileinfo berlin.pbf
++ head -20
+File:
+  Name: berlin.pbf
+  Format: PBF
+  Compression: none
+  Size: 100166910
+Header:
+  Bounding boxes:
+    (13.08283,52.33446,13.762245,52.6783)
+  With history: no
+  Options:
+    generator=osmium/1.16.0
+    osmosis_replication_base_url=https://download.geofabrik.de/europe/germany/berlin-updates
+    osmosis_replication_sequence_number=4965
+    osmosis_replication_timestamp=2026-11-15T21:22:28Z
+    pbf_dense_nodes=true
+    pbf_optional_feature_0=Sort.Type_then_ID
+    sorting=Type_then_ID
+    timestamp=2026-11-15T21:22:28Z
++ osmium tags-filter -O berlin.pbf nwr/amenity nwr/shop nwr/tourism nwr/leisure nwr/healthcare -o p.pbf
++ osmium export -O p.pbf -f geojsonseq -o places.geojsonseq --geometry-types=point,polygon
++ osmium tags-filter -O berlin.pbf nwr/railway=station,halt,tram_stop n/highway=elevator -o t.pbf
++ osmium export -O t.pbf -f geojsonseq -o transit.geojsonseq --geometry-types=point,polygon
++ osmium tags-filter -O berlin.pbf r/boundary=administrative -o a.pbf
++ osmium export -O a.pbf -f geojsonseq -o adm.geojsonseq --geometry-types=polygon
++ osmium tags-filter -O berlin.pbf nwr/building w/highway w/railway nwr/natural=water,wood w/waterway nwr/landuse nwr/leisure -o b.pbf
++ osmium export -O b.pbf -f geojsonseq -o box.geojsonseq --geometry-types=linestring,polygon
++ ls -la adm.geojsonseq box.geojsonseq places.geojsonseq transit.geojsonseq
+-rw-r--r-- 1 runner runner   1236431 Nov 16 15:55 adm.geojsonseq
+-rw-r--r-- 1 runner runner 664589980 Nov 16 15:55 box.geojsonseq
+-rw-r--r-- 1 runner runner  86193117 Nov 16 15:54 places.geojsonseq
+-rw-r--r-- 1 runner runner    653266 Nov 16 15:54 transit.geojsonseq
++ python pipeline/process.py
+districts 12 ['Charlottenburg-Wilmersdorf', 'Friedrichshain-Kreuzberg', 'Lichtenberg', 'Marzahn-Hellersdorf', 'Mitte', 'Neukölln', 'Pankow', 'Reinickendorf', 'Spandau', 'Steglitz-Zehlendorf', 'Tempelhof-Schöneberg', 'Treptow-Köpenick']
+places 56190
+{"places": 56190, "tagged": 28209, "yes": 13061, "limited": 5512, "no": 9636} {"ubahn": {"yes": 138, "no": 35, "limited": 4}, "sbahn": {"yes": 116, "limited": 9, "no": 12, "unknown": 1}, "tram": {"unknown": 653, "yes": 205, "limited": 10, "no": 25}, "rail": {"yes": 28, "limited": 7, "no": 3}, "elevator": {"yes": 411, "unknown": 187, "limited": 6, "designated": 8, "no": 3}}
+Mitte 8958 59.4 48.1
+Friedrichshain-Kreuzberg 6294 58.9 36.3
+Pankow 6074 55.9 39.7
+Lichtenberg 2640 52.6 58.9
+Treptow-Köpenick 3486 47.9 52.0
+Neukölln 4449 46.6 41.8
+Tempelhof-Schöneberg 5441 46.1 42.4
+Charlottenburg-Wilmersdorf 7588 45.3 42.6
+Spandau 2206 43.8 59.3
+Steglitz-Zehlendorf 4053 42.0 51.4
+Marzahn-Hellersdorf 2087 40.9 76.2
+Reinickendorf 2914 40.7 52.8
++ python pipeline/basemap.py
+box.geojsonseq 1704848
+done 8192 6461
