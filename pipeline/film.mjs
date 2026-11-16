@@ -21,7 +21,7 @@ await p.evaluate(({ FPS }) => {
   const V = (lon, lat, zoom, pitch, bearing) => ({ longitude: lon, latitude: lat, zoom, pitch, bearing });
   const lerpV = (A, B, u) => ({ longitude: A.longitude + (B.longitude - A.longitude)*u, latitude: A.latitude + (B.latitude - A.latitude)*u,
     zoom: A.zoom + (B.zoom - A.zoom)*u, pitch: A.pitch + (B.pitch - A.pitch)*u, bearing: A.bearing + (B.bearing - A.bearing)*u });
-  const W0 = V(13.405, 52.505, 10.15, 50, -20), W1 = V(13.405, 52.51, 10.4, 55, -4), W2 = V(13.405, 52.512, 10.45, 55, 10), W3 = V(13.40, 52.515, 11.0, 58, 22), W4 = V(13.405, 52.51, 10.25, 50, 30);
+  const W0 = V(13.40, 52.485, 10.35, 48, -20), W1 = V(13.40, 52.49, 10.55, 50, -6), W2 = V(13.40, 52.492, 10.6, 50, 8), W3 = V(13.395, 52.50, 11.05, 52, 18), W4 = V(13.40, 52.49, 10.4, 48, 30);
   const uYes = pct(S.yes, S.tagged), uUnk = pct(S.places - S.tagged, S.places), ub = pct(F.tyes('ubahn'), F.tsum('ubahn'));
   window.__state = t => {
     const o = {};
@@ -41,11 +41,18 @@ await p.evaluate(({ FPS }) => {
     o.fs = 'Data: © OpenStreetMap contributors (ODbL) · wheelchair tags as mapped by volunteers';
     return o;
   };
-  window.__shot = async fr => { await F.set(window.__state(fr / FPS)); };
+  const Dd = S.districts.filter(d => d.t > 50), bySF = Dd.slice().sort((a, b) => b.yes_of_tagged - a.yes_of_tagged), byMap = Dd.slice().sort((a, b) => b.tagged - a.tagged);
+  const sw = c => `<span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:${c};vertical-align:-2px;margin:0 6px 0 14px"></span>`;
+  const tr = S.transit.tram || {}, trT = F.tsum('tram');
+  window.__still = i => [
+    `Old Berlin has more steps<small>Friedrichshain-Kreuzberg: ${Math.round(bySF.at(-1).yes_of_tagged)}% step-free · ${bySF[0].name}: ${Math.round(bySF[0].yes_of_tagged)}%<br>${sw('#1f5f9e')}step-free${sw('#efe1c9')}mixed${sw('#b4441b')}not accessible · height: places with info</small>`,
+    `Half of Berlin's places are still a blank<small>Best mapped: ${byMap[0].name} ${Math.round(byMap[0].tagged)}% · least: ${byMap.at(-1).name} ${Math.round(byMap.at(-1).tagged)}%<br>${sw('#e7edf2')}well mapped${sw('#7c4fa6')}mostly unknown · height: all places</small>`,
+    `Trains are mapped, trams are not<small>S-Bahn ${pct(F.tyes('sbahn'), F.tsum('sbahn'))}% step-free · U-Bahn ${ub}% · tram stops: ${pct(tr.unknown || 0, trT)}% not recorded<br>${sw('#1f5f9e')}step-free${sw('#e0a43a')}partly${sw('#b4441b')}no${sw('#a39d92')}not recorded</small>`][i];
+  window.__shot = async (fr, still) => { const o = window.__state(fr / FPS); if (still !== undefined) { o.fa = window.__still(still); o.fao = 1; } await F.set(o); };
 }, { FPS });
 if (process.env.STILLS) {
   const stills = [[5.8, 'still_1_accessible'], [12.4, 'still_2_blindspots'], [18.2, 'still_3_transit']];
-  for (const [t, n] of stills) { await p.evaluate(fr => window.__shot(fr), Math.round(t * FPS)); await p.waitForTimeout(400);
+  for (const [i, [t, n]] of stills.entries()) { await p.evaluate(([fr, i]) => window.__shot(fr, i), [Math.round(t * FPS), i]); await p.waitForTimeout(400);
     await p.screenshot({ path: `${OUT}/${n}.jpg`, type: 'jpeg', quality: 93 }); console.log('still', n); }
 } else {
   for (let f = 0; f < DUR * FPS; f++) {

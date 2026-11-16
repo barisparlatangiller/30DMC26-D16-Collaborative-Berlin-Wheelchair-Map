@@ -14,7 +14,7 @@ const hexRGB = h => [1, 3, 5].map(i => parseInt(h.slice(i, i+2), 16));
 const mix = (a, b, t) => a.map((v, i) => Math.round(v + (b[i] - v) * t));
 const ramp = (stops) => v => { for (let i = 1; i < stops.length; i++) if (v <= stops[i][0]) { const [a, ca] = stops[i-1], [b, cb] = stops[i]; return mix(hexRGB(ca), hexRGB(cb), (v - a) / (b - a)); } return hexRGB(stops.at(-1)[1]); };
 const ACC = ramp([[0, '#b4441b'], [0.3, '#e08a4f'], [0.5, '#efe1c9'], [0.7, '#7fa9cf'], [1, '#1f5f9e']]);
-const UNK = ramp([[0, '#e7edf2'], [0.4, '#b9a7cf'], [0.7, '#7c4fa6'], [1, '#3f1c63']]);
+const UNK = ramp([[0, '#e7edf2'], [0.25, '#e7edf2'], [0.45, '#b9a7cf'], [0.65, '#7c4fa6'], [0.85, '#3f1c63'], [1, '#3f1c63']]);
 const ST = { yes: '#1f5f9e', designated: '#1f5f9e', limited: '#e0a43a', no: '#b4441b', unknown: '#a39d92' };
 const PC = ['#b4441b', '#e0a43a', '#1f5f9e'];
 
@@ -62,7 +62,7 @@ function legend() {
 }
 
 // ---- deck
-let grow = 1, view = FILM ? null : { longitude: 13.395, latitude: 52.505, zoom: innerWidth > 760 ? 10.25 : 9.4, pitch: 48, bearing: -12 };
+let grow = 1, view = FILM ? null : { longitude: innerWidth > 760 ? 13.30 : 13.40, latitude: 52.50, zoom: innerWidth > 760 ? 10.2 : 9.4, pitch: 48, bearing: -12 };
 const HEX = (hex || []).filter(d => d.t > 0);
 const maxT = Math.max(1, ...HEX.map(d => d.t)), maxTG = Math.max(1, ...HEX.map(d => d.tg));
 const DC = (districts ? districts.features : []).map(f => { const c = f.geometry.type === 'Polygon' ? f.geometry.coordinates[0] : f.geometry.coordinates[0][0];
@@ -121,7 +121,7 @@ window.Film = {
     if (o.view) view = o.view;
     for (const id of ['fq', 'fa', 'fc', 'fs']) { if (o[id] !== undefined) $(id).innerHTML = o[id]; if (o[id + 'o'] !== undefined) $(id).style.opacity = o[id + 'o']; }
     D.setProps({ viewState: view, layers: layers() });
-    await new Promise(r => D.setProps({ onAfterRender: () => { D.setProps({ onAfterRender: null }); r(); } }));
+    for (let i = 0; i < 3; i++) { await new Promise(r => requestAnimationFrame(r)); D.redraw(true); }
   },
   idle: () => new Promise(r => { const chk = () => (D.isInitialized && !D.needsRedraw() && D.props.layers.every(l => l.isLoaded !== false)) ? r() : setTimeout(chk, 50); chk(); }),
 };
